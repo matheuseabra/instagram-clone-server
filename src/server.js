@@ -1,11 +1,10 @@
-/* eslint-disable no-console */
 const express = require('express');
-const path = require('path');
 
 const app = express();
 const server = require('http').Server(app);
-const cors = require('cors');
 const io = require('socket.io')(server);
+const path = require('path');
+const cors = require('cors');
 
 const port = process.env.PORT || 3333;
 require('dotenv').config();

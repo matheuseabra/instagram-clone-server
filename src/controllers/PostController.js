@@ -1,16 +1,22 @@
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
-const Post = require('../models/Post');
+// const Post = require('../models/Post');
+const PostService = require('../services/PostService');
 
 module.exports = {
   index: async (req, res) => {
-    const feed = await Post.find().sort('-createdAt');
-    return res.status(200).json(feed);
+    try {
+      const feed = await PostService.feed();
+      return res.status(200).json(feed);
+    } catch (err) {
+      return res.status(400).json(err);
+    }
   },
   show: async (req, res) => {
+    const { postId } = req.params;
     try {
-      const post = await Post.findById(req.params.id);
+      const post = await PostService.findById(postId);
       return res.status(200).json(post);
     } catch (err) {
       return res
@@ -33,7 +39,7 @@ module.exports = {
 
       fs.unlinkSync(req.file.path);
 
-      const post = await Post.create({
+      const post = await PostService.create({
         image,
         author,
         place,
@@ -53,7 +59,7 @@ module.exports = {
   },
   like: async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id);
+      const post = await PostService.findById(req.params.id);
       post.likes += 1;
       await post.save();
       const { io } = req;
