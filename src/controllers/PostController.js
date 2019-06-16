@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
@@ -7,15 +6,12 @@ const Post = require('../models/Post');
 module.exports = {
   index: async (req, res) => {
     const feed = await Post.find().sort('-createdAt');
-    return res.json(feed);
+    return res.status(200).json(feed);
   },
   show: async (req, res) => {
     try {
       const post = await Post.findById(req.params.id);
-      if (post) {
-        return res.status(200).json(post);
-      }
-      res.status(404).end();
+      return res.status(200).json(post);
     } catch (err) {
       return res
         .status(400)
@@ -52,8 +48,7 @@ module.exports = {
     } catch (err) {
       return res
         .status(400)
-        .send({ error: err })
-        .end();
+        .send({ error: err });
     }
   },
   like: async (req, res) => {

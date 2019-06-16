@@ -1,6 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable new-cap */
-/* eslint-disable no-unused-expressions */
 const path = require('path');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
@@ -18,22 +15,25 @@ const storageType = {
     cacheControl: 'max-age=31536000',
     acl: 'public-read',
     key: (req, file, cb) => {
+      const copy = file;
       crypto.randomBytes(16, (err, hash) => {
         if (err) cb(err);
 
-        file.key = `${hash.toString('hex')}-${file.originalname}`;
+        copy.key = `${hash.toString('hex')}-${file.originalname}`;
 
         cb(null, file.key);
       });
     },
   }),
+  // eslint-disable-next-line new-cap
   local: new multer.diskStorage({
     destination: path.resolve(__dirname, '..', '..', 'tmp'),
     filename: (req, file, cb) => {
+      const copy = file;
       crypto.randomBytes(16, (err, hash) => {
         if (err) cb(err);
 
-        file.key = `${hash.toString('hex')}-${file.originalname}`;
+        copy.key = `${hash.toString('hex')}-${file.originalname}`;
 
         cb(null, file.key);
       });
