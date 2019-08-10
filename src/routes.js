@@ -10,6 +10,6 @@ routes.get('/', (req, res) => res.json({ message: 'API up and running' }));
 routes.get('/feed', PostController.index);
 routes.get('/post/:id', PostController.show);
 routes.post('/post', upload.single('image'), PostController.create);
-routes.get('/post/:id/like', PostController.like);
+routes.post('/post/:id/like', PostController.like);
 
 module.exports = routes;

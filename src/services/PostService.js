@@ -4,21 +4,24 @@ const errorHandler = require('../middlewares/errorHandler');
 module.exports = {
   feed: async () => {
     try {
-      return await Post.find().sort('-createdAt');
+      const newsFeed = await Post.find().sort('-createdAt');
+      return newsFeed;
     } catch (err) {
       return errorHandler(err);
     }
   },
   findById: async (postId) => {
     try {
-      return await Post.findById(postId);
+      const singlePost = await Post.findById(postId);
+      return singlePost;
     } catch (err) {
       return errorHandler(err);
     }
   },
   create: async (postData) => {
     try {
-      return await Post.create({ ...postData });
+      const newPost = await Post.create({ ...postData });
+      return newPost;
     } catch (err) {
       return errorHandler(err);
     }

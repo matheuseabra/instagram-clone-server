@@ -27,7 +27,7 @@ const storageType = {
   }),
   // eslint-disable-next-line new-cap
   local: new multer.diskStorage({
-    destination: path.resolve(__dirname, '..', '..', 'tmp'),
+    destination: path.resolve(__dirname, '..', '..', 'tmp', 'resized'),
     filename: (req, file, cb) => {
       const copy = file;
       crypto.randomBytes(16, (err, hash) => {
@@ -42,8 +42,8 @@ const storageType = {
 };
 
 module.exports = {
-  dest: path.resolve(__dirname, '..', '..', 'tmp'),
-  storage: storageType.local,
+  dest: path.resolve(__dirname, '..', '..', 'tmp', 'resized'),
+  storage: storageType.s3,
   limits: { fileSize: 2 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedExtensions = /jpeg|jpg|png/;

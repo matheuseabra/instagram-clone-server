@@ -1,7 +1,5 @@
-const sharp = require('sharp');
-const path = require('path');
-const fs = require('fs');
-// const Post = require('../models/Post');
+// const resizer = require('node-image-resizer');
+// const path = require('path');
 const PostService = require('../services/PostService');
 
 module.exports = {
@@ -14,9 +12,8 @@ module.exports = {
     }
   },
   show: async (req, res) => {
-    const { postId } = req.params;
     try {
-      const post = await PostService.findById(postId);
+      const post = await PostService.findById(req.params.id);
       return res.status(200).json(post);
     } catch (err) {
       return res
@@ -29,18 +26,11 @@ module.exports = {
     const {
       author, place, legend, hashtags,
     } = req.body;
-    const { filename: image } = req.file;
+    const { location, filename } = req.file;
 
     try {
-      await sharp(req.file.path)
-        .resize(500)
-        .jpeg({ quality: 70 })
-        .toFile(path.resolve(req.file.destination, 'resized', image));
-
-      fs.unlinkSync(req.file.path);
-
       const post = await PostService.create({
-        image,
+        image: location || filename,
         author,
         place,
         legend,
